@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
-import { View, StyleSheet, SafeAreaView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Header } from "@/components/Header";
 import { List } from "@/components/List";
@@ -15,10 +16,10 @@ export default function Question1() {
   const [showListAsGrid, setShowListAsGrid] = useState(false);
   const [sort, setSort] = useState<Sort>("ASC");
 
-  const sortedRobots = useMemo(
-    () => sortCollection(robots, sort),
-    [robots, sort]
-  );
+  useEffect(() => {
+    const sortedCollection = sortCollection(robots, sort);
+    setRobots(sortedCollection);
+  }, [sort]);
 
   const _onPressItem = () => {
     console.log("open item");
@@ -30,20 +31,20 @@ export default function Question1() {
   const _onPressSort = (sortType: Sort) => setSort(sortType);
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <View style={styles.container}>
         <Header
           onPressGrid={_onPressGrid}
           onPressList={_onPressList}
           onPressSort={_onPressSort}
         />
         <List
-          data={sortedRobots}
+          data={robots}
           onPressItem={_onPressItem}
-          showAsGrid={showListAsGrid}
+          showListAsGrid={showListAsGrid}
         />
-      </SafeAreaView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 

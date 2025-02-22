@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Dimensions, FlatList, StyleSheet } from "react-native";
 import { ListItem } from "@/components/ListItem";
 import { Item } from "@/types/Item";
@@ -7,32 +7,34 @@ import { ListGridItem } from "./ListGridItem";
 interface ListProps {
   data: Item[];
   onPressItem: () => void;
-  showAsGrid: boolean;
+  showListAsGrid: boolean;
 }
 
-export const List = ({ data, onPressItem, showAsGrid = false }: ListProps) => {
+export const List = ({
+  data,
+  onPressItem,
+  showListAsGrid = false,
+}: ListProps) => {
+  const listType = showListAsGrid ? "grid" : "list";
   const itemWidth = Dimensions.get("window").width / 2;
-  const numColumns = showAsGrid ? 2 : 1;
 
-  const renderItem = ({ item }: { item: Item }) =>
-    showAsGrid ? (
-      <ListGridItem
-        item={item}
-        onPress={onPressItem}
-        itemWidth={itemWidth}
-        key={item.id}
-      />
-    ) : (
-      <ListItem item={item} onPress={onPressItem} key={item.id} />
-    );
+  const renderItem = useCallback(
+    ({ item }: { item: Item }) =>
+      showListAsGrid ? (
+        <ListGridItem item={item} onPress={onPressItem} itemWidth={itemWidth} />
+      ) : (
+        <ListItem item={item} onPress={onPressItem} key={item.id} />
+      ),
+    [showListAsGrid]
+  );
 
   return (
     <FlatList
-      key={`flatlist-${showAsGrid ? "grid" : "list"}`}
       contentContainerStyle={styles.list}
       data={data}
       renderItem={renderItem}
-      numColumns={numColumns}
+      numColumns={showListAsGrid ? 2 : 1}
+      key={`${listType}-list`}
     />
   );
 };

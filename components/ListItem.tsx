@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 import { Item } from "@/types/Item";
 import { getRandomColor } from "@/utils/colors";
 
@@ -18,7 +19,7 @@ export const ListItem = ({ onPress, item }: ListItemProps) => {
         ]}
       >
         {item.avatar ? (
-          <Image style={styles.image} source={{ uri: item.avatar }} />
+          <Image style={styles.image} source={item.avatar} contentFit="cover" />
         ) : null}
         <View style={styles.descriptionContainer}>
           <Text>

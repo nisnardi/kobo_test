@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Image } from "expo-image";
 import { Item } from "@/types/Item";
 import { getRandomColor } from "@/utils/colors";
 
@@ -28,8 +29,8 @@ export const ListGridItem = ({ item, itemWidth, onPress }: ListGridItem) => {
       {item.avatar ? (
         <Image
           style={[styles.image, { width: imageSize, height: imageSize }]}
-          source={{ uri: item.avatar }}
-          resizeMode="cover"
+          source={item.avatar}
+          contentFit="cover"
         />
       ) : null}
       <Text style={styles.text}>
