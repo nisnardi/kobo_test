@@ -1,37 +1,42 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
-const IMAGE_SIZE = 30;
+import { HeaderIcon } from "./HeaderIcon";
 
-export const Header = () => {
+interface HeaderProps {
+  onPressGrid: () => void;
+  onPressList: () => void;
+}
+
+export const Header = ({ onPressGrid, onPressList }: HeaderProps) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>User List</Text>
       <View style={styles.buttonsContainer}>
         {/* // Grid mode */}
-        <Image
-          style={styles.image}
-          source={require("../assets/images/grid.png")}
+        <HeaderIcon
+          onPress={onPressGrid}
+          iconSource={require("../assets/images/grid.png")}
         />
         {/* // List mode */}
-        <Image
-          style={styles.image}
-          source={require("../assets/images/list.png")}
+        <HeaderIcon
+          onPress={onPressList}
+          iconSource={require("../assets/images/list.png")}
         />
         {/* // Sort last Name A-Z */}
-        <Image
-          style={styles.image}
-          source={require("../assets/images/sort_az.png")}
+        <HeaderIcon
+          onPress={() => {}}
+          iconSource={require("../assets/images/sort_az.png")}
         />
         {/* // Sort last Name Z-A */}
-        <Image
-          style={styles.image}
-          source={require("../assets/images/sort_za.png")}
+        <HeaderIcon
+          onPress={() => {}}
+          iconSource={require("../assets/images/sort_za.png")}
         />
         {/* // Only show elements that have large avatars */}
-        <Image
-          style={styles.image}
-          source={require("../assets/images/avatar.png")}
+        <HeaderIcon
+          onPress={() => {}}
+          iconSource={require("../assets/images/avatar.png")}
         />
       </View>
     </View>
@@ -56,5 +61,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  image: { width: IMAGE_SIZE, height: IMAGE_SIZE },
 });
