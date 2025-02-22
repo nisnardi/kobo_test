@@ -2,13 +2,21 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { HeaderIcon } from "./HeaderIcon";
+import { Sort } from "@/types/Sort";
 
 interface HeaderProps {
   onPressGrid: () => void;
   onPressList: () => void;
+  onPressSort: (sort: Sort) => void;
 }
 
-export const Header = ({ onPressGrid, onPressList }: HeaderProps) => {
+export const Header = ({
+  onPressGrid,
+  onPressList,
+  onPressSort,
+}: HeaderProps) => {
+  const onPressSortHandler = (sortType: Sort) => () => onPressSort(sortType);
+
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>User List</Text>
@@ -25,12 +33,12 @@ export const Header = ({ onPressGrid, onPressList }: HeaderProps) => {
         />
         {/* // Sort last Name A-Z */}
         <HeaderIcon
-          onPress={() => {}}
+          onPress={onPressSortHandler("ASC")}
           iconSource={require("../assets/images/sort_az.png")}
         />
         {/* // Sort last Name Z-A */}
         <HeaderIcon
-          onPress={() => {}}
+          onPress={onPressSortHandler("DESC")}
           iconSource={require("../assets/images/sort_za.png")}
         />
         {/* // Only show elements that have large avatars */}
@@ -49,6 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingHorizontal: 10,
   },
   title: {
     textAlign: "center",
