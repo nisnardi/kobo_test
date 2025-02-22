@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Item } from "@/types/Item";
+import { getRandomColor } from "@/utils/colors";
 
 interface ListGridItem {
   onPress: () => void;
@@ -18,18 +19,23 @@ export const ListGridItem = ({ item, itemWidth, onPress }: ListGridItem) => {
       onPress={onPress}
       style={[
         styles.container,
-        { backgroundColor: item.backgroundColor, width: itemWidth },
+        {
+          backgroundColor: item.backgroundColor || getRandomColor(),
+          width: itemWidth,
+        },
       ]}
     >
-      <Image
-        style={[styles.image, { width: imageSize, height: imageSize }]}
-        source={{ uri: item.avatar }}
-        resizeMode="cover"
-      />
+      {item.avatar ? (
+        <Image
+          style={[styles.image, { width: imageSize, height: imageSize }]}
+          source={{ uri: item.avatar }}
+          resizeMode="cover"
+        />
+      ) : null}
       <Text style={styles.text}>
         {item.first_name} {item.last_name}
       </Text>
-      <Text style={styles.text}>{item.email}</Text>
+      {item.email ? <Text style={styles.text}>{item.email}</Text> : null}
     </TouchableOpacity>
   );
 };

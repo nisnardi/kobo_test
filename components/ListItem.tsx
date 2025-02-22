@@ -21,11 +21,9 @@ export const ListItem = ({ onPress, item }: ListItemProps) => {
           <Image style={styles.image} source={{ uri: item.avatar }} />
         ) : null}
         <View style={styles.descriptionContainer}>
-          {item.first_name && item.last_name ? (
-            <Text>
-              {item.first_name} {item.last_name}
-            </Text>
-          ) : null}
+          <Text>
+            {item.first_name} {item.last_name}
+          </Text>
           {item.email ? <Text>{item.email}</Text> : null}
         </View>
       </View>
