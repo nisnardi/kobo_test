@@ -5,15 +5,19 @@ import { HeaderIcon } from "./HeaderIcon";
 import { Sort } from "@/types/Sort";
 
 interface HeaderProps {
+  isAvatarFilterEnabled: boolean;
   onPressGrid: () => void;
   onPressList: () => void;
   onPressSort: (sort: Sort) => void;
+  onPressAvatarFilter: () => void;
 }
 
 export const Header = ({
+  isAvatarFilterEnabled = false,
   onPressGrid,
   onPressList,
   onPressSort,
+  onPressAvatarFilter,
 }: HeaderProps) => {
   const onPressSortHandler = (sortType: Sort) => () => onPressSort(sortType);
 
@@ -43,8 +47,9 @@ export const Header = ({
         />
         {/* // Only show elements that have large avatars */}
         <HeaderIcon
-          onPress={() => {}}
+          onPress={onPressAvatarFilter}
           iconSource={require("../assets/images/avatar.png")}
+          selected={isAvatarFilterEnabled}
         />
       </View>
     </View>

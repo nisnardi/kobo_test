@@ -12,14 +12,22 @@ import { sortCollection } from "@/utils/sorting";
 const DATA = require("../assets/MOCK_DATA.json");
 
 export default function Question1() {
+  const [originalCollection, setOriginalCollection] = useState<Item[]>(DATA);
   const [robots, setRobots] = useState<Item[]>(DATA);
   const [showListAsGrid, setShowListAsGrid] = useState(false);
   const [sort, setSort] = useState<Sort>("ASC");
+  const [shouldFilterWithoutAvatar, setShouldFilterWithoutAvatar] =
+    useState(false);
 
   useEffect(() => {
-    const sortedCollection = sortCollection(robots, sort);
+    const sortedCollection = sortCollection(
+      originalCollection,
+      sort,
+      shouldFilterWithoutAvatar
+    );
+
     setRobots(sortedCollection);
-  }, [sort]);
+  }, [sort, shouldFilterWithoutAvatar]);
 
   const _onPressItem = () => {
     console.log("open item");
@@ -30,6 +38,10 @@ export default function Question1() {
   const _onPressList = () => setShowListAsGrid(false);
   const _onPressSort = (sortType: Sort) => setSort(sortType);
 
+  const _onPressAvatarFilter = () => {
+    setShouldFilterWithoutAvatar((prevState) => !prevState);
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.container}>
@@ -37,11 +49,14 @@ export default function Question1() {
           onPressGrid={_onPressGrid}
           onPressList={_onPressList}
           onPressSort={_onPressSort}
+          onPressAvatarFilter={_onPressAvatarFilter}
+          isAvatarFilterEnabled={shouldFilterWithoutAvatar}
         />
         <List
           data={robots}
           onPressItem={_onPressItem}
           showListAsGrid={showListAsGrid}
+          isAvatarFilterEnabled={shouldFilterWithoutAvatar}
         />
       </View>
     </SafeAreaView>

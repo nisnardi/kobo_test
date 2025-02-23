@@ -6,14 +6,15 @@ import { ListGridItem } from "./ListGridItem";
 
 interface ListProps {
   data: Item[];
-  onPressItem: () => void;
   showListAsGrid: boolean;
+  isAvatarFilterEnabled: boolean;
+  onPressItem: () => void;
 }
 
 export const List = ({
   data,
-  onPressItem,
   showListAsGrid = false,
+  onPressItem,
 }: ListProps) => {
   const listType = showListAsGrid ? "grid" : "list";
   const itemWidth = Dimensions.get("window").width / 2;
@@ -34,7 +35,7 @@ export const List = ({
       data={data}
       renderItem={renderItem}
       numColumns={showListAsGrid ? 2 : 1}
-      key={`${listType}-list`}
+      key={listType}
     />
   );
 };
