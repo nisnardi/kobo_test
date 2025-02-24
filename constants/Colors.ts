@@ -1,4 +1,4 @@
 export const COLORS = {
-  active: "#2ff0a6",
+  active: "#CCC",
   background: "#F5FCFF",
 };

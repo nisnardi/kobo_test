@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { Item } from "@/types/Item";
-import { getRandomColor } from "@/utils/colors";
 
 interface ListItemProps {
   onPress: () => void;
@@ -13,14 +12,17 @@ export const ListItem = ({ onPress, item }: ListItemProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View
-        style={[
-          styles.container,
-          { backgroundColor: item.backgroundColor || getRandomColor() },
-        ]}
+        style={[styles.container, { backgroundColor: item.backgroundColor }]}
       >
-        {item.avatar ? (
-          <Image style={styles.image} source={item.avatar} contentFit="cover" />
-        ) : null}
+        <View style={styles.image}>
+          {item.avatar ? (
+            <Image
+              style={styles.image}
+              source={item.avatar}
+              contentFit="cover"
+            />
+          ) : null}
+        </View>
         <View style={styles.descriptionContainer}>
           <Text>
             {item.first_name} {item.last_name}

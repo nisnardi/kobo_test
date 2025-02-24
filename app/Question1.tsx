@@ -8,26 +8,67 @@ import { COLORS } from "@/constants/Colors";
 import { Item } from "@/types/Item";
 import { Sort } from "@/types/Sort";
 import { sortCollection } from "@/utils/sorting";
-
-const DATA = require("../assets/MOCK_DATA.json");
+import { fetchUrlList, fetchUserPage } from "@/utils/fetch";
 
 export default function Question1() {
-  const [originalCollection, setOriginalCollection] = useState<Item[]>(DATA);
-  const [robots, setRobots] = useState<Item[]>(DATA);
+  const [users, setUsers] = useState<Item[]>([]);
   const [showListAsGrid, setShowListAsGrid] = useState(false);
-  const [sort, setSort] = useState<Sort>("ASC");
+  const [sort, setSort] = useState<Sort | null>(null);
   const [shouldFilterWithoutAvatar, setShouldFilterWithoutAvatar] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [urls, setUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    const sortedCollection = sortCollection(
-      originalCollection,
-      sort,
-      shouldFilterWithoutAvatar
-    );
+    const fetchList = async () => {
+      setIsLoading(true);
+      let pageUrls = urls;
 
-    setRobots(sortedCollection);
-  }, [sort, shouldFilterWithoutAvatar]);
+      try {
+        if (urls.length === 0) {
+          pageUrls = await fetchUrlList();
+          setUrls(pageUrls);
+        }
+        console.log(pageUrls);
+        const fetchedUsers = await fetchUserPage(pageUrls[pageNumber]);
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.log("Initial Load", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchList();
+  }, []);
+
+  useEffect(() => {
+    if (sort === null) {
+      return;
+    }
+
+    const sortedUsers = sortCollection(users, sort, shouldFilterWithoutAvatar);
+    setUsers(sortedUsers);
+  }, [sort]);
+
+  const fetchNextPage = async () => {
+    setIsLoadingPage(true);
+    try {
+      if (pageNumber < urls.length - 1) {
+        const newPageNumber = pageNumber + 1;
+        const newUsers = await fetchUserPage(urls[newPageNumber]);
+
+        setUsers([...users, ...newUsers]);
+        setPageNumber(newPageNumber);
+      }
+    } catch (error) {
+      console.log("Fetch next page: ", error);
+    } finally {
+      setIsLoadingPage(false);
+    }
+  };
 
   const _onPressItem = () => {
     console.log("open item");
@@ -43,7 +84,7 @@ export default function Question1() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <View style={styles.container}>
         <Header
           onPressGrid={_onPressGrid}
@@ -53,10 +94,13 @@ export default function Question1() {
           isAvatarFilterEnabled={shouldFilterWithoutAvatar}
         />
         <List
-          data={robots}
+          data={users}
           onPressItem={_onPressItem}
           showListAsGrid={showListAsGrid}
           isAvatarFilterEnabled={shouldFilterWithoutAvatar}
+          isLoading={isLoading}
+          isLoadingPage={isLoadingPage}
+          onEndReached={fetchNextPage}
         />
       </View>
     </SafeAreaView>

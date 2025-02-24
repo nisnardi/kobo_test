@@ -1,8 +1,7 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 import { Image } from "expo-image";
 import { Item } from "@/types/Item";
-import { getRandomColor } from "@/utils/colors";
 
 interface ListGridItem {
   onPress: () => void;
@@ -21,18 +20,20 @@ export const ListGridItem = ({ item, itemWidth, onPress }: ListGridItem) => {
       style={[
         styles.container,
         {
-          backgroundColor: item.backgroundColor || getRandomColor(),
+          backgroundColor: item.backgroundColor,
           width: itemWidth,
         },
       ]}
     >
-      {item.avatar ? (
-        <Image
-          style={[styles.image, { width: imageSize, height: imageSize }]}
-          source={item.avatar}
-          contentFit="cover"
-        />
-      ) : null}
+      <View style={{ width: imageSize, height: imageSize }}>
+        {item.avatar ? (
+          <Image
+            style={[styles.image, { width: imageSize, height: imageSize }]}
+            source={item.avatar}
+            contentFit="cover"
+          />
+        ) : null}
+      </View>
       <Text style={styles.text}>
         {item.first_name} {item.last_name}
       </Text>
