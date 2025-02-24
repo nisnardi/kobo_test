@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -7,7 +7,7 @@ import { List } from "@/components/List";
 import { COLORS } from "@/constants/Colors";
 import { Item } from "@/types/Item";
 import { Sort } from "@/types/Sort";
-import { sortCollection } from "@/utils/sorting";
+import { sortAndFilterCollection } from "@/utils/sorting";
 import { fetchUrlList, fetchUserPage } from "@/utils/fetch";
 
 export default function Question1() {
@@ -31,7 +31,7 @@ export default function Question1() {
           pageUrls = await fetchUrlList();
           setUrls(pageUrls);
         }
-        console.log(pageUrls);
+
         const fetchedUsers = await fetchUserPage(pageUrls[pageNumber]);
         setUsers(fetchedUsers);
       } catch (error) {
@@ -44,14 +44,9 @@ export default function Question1() {
     fetchList();
   }, []);
 
-  useEffect(() => {
-    if (sort === null) {
-      return;
-    }
-
-    const sortedUsers = sortCollection(users, sort, shouldFilterWithoutAvatar);
-    setUsers(sortedUsers);
-  }, [sort]);
+  const sortedUsers = useMemo(() => {
+    return sortAndFilterCollection(users, sort, shouldFilterWithoutAvatar);
+  }, [users, sort, shouldFilterWithoutAvatar]);
 
   const fetchNextPage = async () => {
     setIsLoadingPage(true);
@@ -80,7 +75,7 @@ export default function Question1() {
   const _onPressSort = (sortType: Sort) => setSort(sortType);
 
   const _onPressAvatarFilter = () => {
-    setShouldFilterWithoutAvatar((prevState) => !prevState);
+    setShouldFilterWithoutAvatar((prevFilter) => !prevFilter);
   };
 
   return (
@@ -94,7 +89,7 @@ export default function Question1() {
           isAvatarFilterEnabled={shouldFilterWithoutAvatar}
         />
         <List
-          data={users}
+          data={sortedUsers}
           onPressItem={_onPressItem}
           showListAsGrid={showListAsGrid}
           isAvatarFilterEnabled={shouldFilterWithoutAvatar}

@@ -6,19 +6,17 @@ interface ListFooterProps {
   isLoading?: boolean;
 }
 
-const ListFooter = ({ isLoading = false, message }: ListFooterProps) => {
+export const ListFooter = ({ isLoading = false, message }: ListFooterProps) => {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator testID="loading-test-id" />
       ) : (
         <Text style={styles.text}>{message}</Text>
       )}
     </View>
   );
 };
-
-export default ListFooter;
 
 const styles = StyleSheet.create({
   container: {

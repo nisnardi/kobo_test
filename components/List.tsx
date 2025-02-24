@@ -5,12 +5,11 @@ import { Item } from "@/types/Item";
 import { ListGridItem } from "./ListGridItem";
 import { Loader } from "./Loader";
 import { EmptyList } from "./EmptyList";
-import ListFooter from "./ListFooter";
+import { ListFooter } from "./ListFooter";
 
 interface ListProps {
   data: Item[];
   showListAsGrid: boolean;
-  isAvatarFilterEnabled: boolean;
   isLoading?: boolean;
   isLoadingPage?: boolean;
   onPressItem: () => void;
@@ -78,6 +77,7 @@ export const List = ({
           return <ListFooter isLoading={isLoadingPage} message="End of list" />;
         }
       }}
+      testID="list-test-id"
     />
   );
 };

@@ -5,7 +5,11 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 export const Loader = () => {
   return (
     <View style={styles.loading}>
-      <ActivityIndicator color={COLORS.active} size="large" />
+      <ActivityIndicator
+        color={COLORS.active}
+        size="large"
+        testID="loading-test-id"
+      />
     </View>
   );
 };

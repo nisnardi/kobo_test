@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { Item } from "@/types/Item";
+import { COLORS } from "@/constants/Colors";
 
 interface ListItemProps {
   onPress: () => void;
@@ -12,9 +13,13 @@ export const ListItem = ({ onPress, item }: ListItemProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View
-        style={[styles.container, { backgroundColor: item.backgroundColor }]}
+        style={[
+          styles.container,
+          { backgroundColor: item.backgroundColor || COLORS.white },
+        ]}
+        testID="list-item-container-test-id"
       >
-        <View style={styles.image}>
+        <View style={styles.image} testID="list-item-image-container-test-id">
           {item.avatar ? (
             <Image
               style={styles.image}

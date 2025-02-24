@@ -1,19 +1,27 @@
 import { Item } from "@/types/Item";
 import { Sort } from "@/types/Sort";
 
-export const sortCollection = (
+export const sortAndFilterCollection = (
   collection: Item[],
-  order: Sort,
+  order: Sort | null,
   filter: boolean
 ): Item[] => {
   const collectionWithLastName: Item[] = [];
   const collectionWithoutLastName: Item[] = [];
 
-  collection.forEach((item) => {
-    if (filter && item.avatar_large === null) {
-      return;
-    }
+  if (order === null && !filter) {
+    return collection;
+  }
 
+  const filteredCollection = filter
+    ? collection.filter((item) => item.avatar_large !== null)
+    : collection;
+
+  if (order === null) {
+    return filteredCollection;
+  }
+
+  filteredCollection.forEach((item) => {
     if (item.last_name === null) {
       collectionWithoutLastName.push(item);
     } else {
